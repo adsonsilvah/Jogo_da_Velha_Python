@@ -3,15 +3,16 @@ from tkinter import *
 
 def troca_jogador(row, column):
      
-     global alternajogador
+     global jogadorAtual
+
      if tabuleiro[row][column]['text'] == "" and verifica_vitoria() is False:
 
-        if alternajogador == jogadores[0]:
+        if jogadorAtual == jogadores[0]:
 
-            tabuleiro[row][column]['text'] = alternajogador
+            tabuleiro[row][column]['text'] = jogadorAtual
 
             if verifica_vitoria() is False:
-                alternajogador = jogadores[1]
+                jogadorAtual = jogadores[1]
                 label.config(text=('Vez do jogador '+jogadores[1]))
 
             elif verifica_vitoria() is True:
@@ -22,11 +23,11 @@ def troca_jogador(row, column):
 
         else:
 
-            tabuleiro[row][column]['text'] = alternajogador
+            tabuleiro[row][column]['text'] = jogadorAtual
 
             if verifica_vitoria() is False:
-                alternajogador = jogadores[0]
-                label.config(text=('Vez do jogador '+ alternajogador[0]))
+                jogadorAtual = jogadores[0]
+                label.config(text=('Vez do jogador '+ jogadorAtual[0]))
 
             elif verifica_vitoria() is True:
                 label.config(text=('Jogador '+jogadores[1]+' ganhou'))
@@ -61,7 +62,7 @@ def verifica_vitoria():
         tabuleiro[2][0]
         return True
 
-    elif verifica_espaco_vazio() is False:
+    elif verifica_velha() is False:
 
         for row in range(3):
             for column in range(3):
@@ -71,8 +72,7 @@ def verifica_vitoria():
     else:
         return False
 
-def verifica_espaco_vazio():
-     
+def verifica_velha():
      espacos = 9
 
      for rows in range(3):
@@ -84,10 +84,10 @@ def verifica_espaco_vazio():
             return False
      else:
             return True
-     
+
 def novo_jogo():
-    global alternajogador
-    alternajogador = jogadores[0]
+    global jogadorAtual
+    jogadorAtual = jogadores[0]
     label.config(text='Vez do jogador ' + jogadores[0])
     for row in range(3):
         for column in range(3):
@@ -96,22 +96,23 @@ def novo_jogo():
 janela = Tk()
 janela.title('Jogo da Velha')
 jogadores = ["X","O"]
-alternajogador = jogadores[0]
+jogadorAtual = jogadores[0]
+janela.config(bg='white')
 
 tabuleiro = np.empty((3, 3), dtype=object)
 
-label = Label(text='Vez do jogador '+ jogadores[0])
-label.pack(side='top')
+label = Label(text='Vez do jogador '+ jogadores[0], bg='yellow', fg='black')
+label.pack(side='top', pady= 10)
 
-reset_button = Button(text="Novo jogo", command=novo_jogo)
-reset_button.pack(side="top")
+reset_button = Button(text="Novo jogo", command=novo_jogo, bg='black',fg='white', border=5)
+reset_button.pack(side="bottom",pady= 10)
 
 frame = Frame(janela)
 frame.pack()
 
 for row in range(3):
     for column in range(3):
-        tabuleiro[row][column] = Button(frame, text="",font=('consolas',40), width=5, height=2,
+        tabuleiro[row][column] = Button(frame, text="",font=('consolas',40), width=5, height=2,bg='blue',
                                       command= lambda row=row, column=column: troca_jogador(row,column))
         tabuleiro[row][column].grid(row=row,column=column)
         
